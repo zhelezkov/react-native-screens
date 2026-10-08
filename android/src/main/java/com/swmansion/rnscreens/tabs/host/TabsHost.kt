@@ -1,6 +1,7 @@
 package com.swmansion.rnscreens.tabs.host
 
 import android.annotation.SuppressLint
+import android.view.View
 import android.view.ViewTreeObserver
 import android.widget.FrameLayout
 import androidx.core.graphics.drawable.toDrawable
@@ -12,6 +13,7 @@ import com.facebook.react.uimanager.ThemedReactContext
 import com.facebook.react.uimanager.UIManagerHelper
 import com.swmansion.rnscreens.common.colorscheme.ColorScheme
 import com.swmansion.rnscreens.helpers.FragmentManagerHelper
+import com.swmansion.rnscreens.helpers.ScreenStackFinder
 import com.swmansion.rnscreens.helpers.getFabricUIManagerNotNull
 import com.swmansion.rnscreens.tabs.container.TabsActionOrigin
 import com.swmansion.rnscreens.tabs.container.TabsContainer
@@ -91,6 +93,11 @@ class TabsHost(
         checkNotNull(FragmentManagerHelper.findFragmentManagerForView(this)) {
             "[RNScreens] Nullish fragment manager - can't run container operations"
         }
+
+    /**
+     * Pops only a legacy (v4) stack found in the tab's first descendant chain; a v5 stack is left as is.
+     */
+    override fun popToRootInTab(tabContent: View): Boolean = ScreenStackFinder.popToRootInFirstDescendantChain(tabContent)
 
     internal fun mountReactSubviewAt(
         tabsScreen: TabsScreen,
